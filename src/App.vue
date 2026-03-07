@@ -2,4 +2,8 @@
   <router-view />
 </template>
 
-<style></style>
+<style>
+body {
+  background-color: #f0eee9;
+}
+</style>

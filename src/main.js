@@ -1,9 +1,12 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router";
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
 
 // ant
-import Antd from "ant-design-vue";
-import "ant-design-vue/dist/reset.css";
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/reset.css';
 
-createApp(App).use(router).use(Antd).mount("#app");
+// 自定义全局组件
+import GlobalComponents from './components';
+
+createApp(App).use(router).use(Antd).use(GlobalComponents).mount('#app');

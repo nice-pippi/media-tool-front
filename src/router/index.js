@@ -1,15 +1,15 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
   {
-    path: "/",
-    name: "root",
-    redirect: "/index",
+    path: '/',
+    name: 'root',
+    redirect: '/index',
     children: [
       {
-        path: "index",
-        name: "index",
-        component: () => import("../views/Index/index.vue"),
+        path: 'index',
+        name: 'index',
+        component: () => import('@/views/Index/index.vue'),
       },
     ],
   },
