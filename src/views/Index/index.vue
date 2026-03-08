@@ -7,13 +7,19 @@
       @change="handleTabChange"
     >
       <a-tab-pane key="video" tab="视频">
-        <c-video></c-video>
+        <div class="tab-content">
+          <c-video></c-video>
+        </div>
       </a-tab-pane>
       <a-tab-pane key="audio" tab="音频">
-        <c-audio></c-audio>
+        <div class="tab-content">
+          <c-audio></c-audio>
+        </div>
       </a-tab-pane>
       <a-tab-pane key="image" tab="图片">
-        <c-image></c-image>
+        <div class="tab-content">
+          <c-image></c-image>
+        </div>
       </a-tab-pane>
     </a-tabs>
     <router-view />
@@ -22,7 +28,7 @@
 
 <script setup>
 import { ref } from 'vue';
-const activeKey = ref('index');
+const activeKey = ref('video');
 
 // 切换 tab
 const handleTabChange = (key) => {
@@ -49,5 +55,12 @@ const handleTabChange = (key) => {
     width: 40px !important;
     margin-left: -6px;
   }
+}
+
+// 内容区域样式 - 宽度比tab容器大
+.tab-content {
+  width: calc(100% + 200px);
+  margin-left: -100px;
+  padding: 20px;
 }
 </style>
