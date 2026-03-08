@@ -62,5 +62,6 @@ const handleTabChange = (key) => {
   width: calc(100% + 200px);
   margin-left: -100px;
   padding: 20px;
+  background-color: #f5f5f5;
 }
 </style>
