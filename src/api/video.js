@@ -2,15 +2,11 @@ import { request } from '@/utils/request';
 
 const baseURL = '/video';
 
-/**
- * 下载视频
- * @param {*} params
- * @returns
- */
-export function download(params) {
+// 创建视频下载任务
+export function createDownloadTask(data) {
   return request({
-    url: `${baseURL}/download`,
-    method: 'get',
-    params,
+    url: `${baseURL}/create-download-task`,
+    method: 'post',
+    data,
   });
 }
