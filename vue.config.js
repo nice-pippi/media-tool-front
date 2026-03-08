@@ -3,5 +3,8 @@ module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
     port: 9000,
+    client: {
+      overlay: false,
+    },
   },
 });
