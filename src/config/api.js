@@ -1,6 +1,6 @@
 // 开发环境 - 本地调试用
 const DEV_CONFIG = {
-  apiUrl: 'http://localhost:8080', // 本地后端地址
+  apiUrl: 'http://localhost:8888/media-tool', // 本地后端地址
   name: '开发环境',
 };
 
