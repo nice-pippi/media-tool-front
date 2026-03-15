@@ -1,5 +1,5 @@
 <template>
-  <div class="tab-container">
+  <div class="tab-container animate__animated animate__fadeInUp">
     <a-tabs
       v-model="activeKey"
       centered
@@ -61,7 +61,5 @@ const handleTabChange = (key) => {
 .tab-content {
   width: calc(100% + 200px);
   margin-left: -100px;
-  padding: 20px;
-  background-color: #f5f5f5;
 }
 </style>

@@ -6,6 +6,9 @@ import router from './router';
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
 
+// animate
+import 'animate.css';
+
 // 自定义全局组件
 import GlobalComponents from './components';
 
