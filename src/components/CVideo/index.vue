@@ -1,44 +1,53 @@
 <template>
   <a-flex wrap="wrap" gap="small">
     <c-item
-      title="下载视频"
-      img="download-video.png"
-      @click="handleOpen('downloadVideo')"
-    >
-    </c-item>
+      v-for="item in formConfigs"
+      :key="item.key"
+      :title="item.name"
+      :img="item.img"
+      @click="handleOpen(item.key)"
+    />
   </a-flex>
 
   <a-modal
     v-model:open="visible"
     @ok="handleOk"
-    :title="currentFormConfig.name"
+    :title="currentConfig?.name"
+    destroy-on-close
   >
-    <component :is="currentFormConfig.component || ''"></component>
+    <component
+      :is="componentMap[currentKey]"
+      v-if="currentKey && componentMap[currentKey]"
+    />
   </a-modal>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, defineAsyncComponent } from 'vue';
 
-// 模态框显示状态
 const visible = ref(false);
+const currentKey = ref('');
 
-// 所有表单配置
-const formConfigs = reactive([
-  { key: 'downloadVideo', name: '下载视频', component: 'a-input' },
-]);
+// 组件映射表
+const componentMap = {
+  downloadVideo: defineAsyncComponent(() => import('./DownloadVideo.vue')),
+  // 未来继续扩展...
+};
 
-// 当前表单配置
-const currentFormConfig = ref({});
+// 表单配置
+const formConfigs = [
+  { key: 'downloadVideo', name: '下载视频', img: 'download-video.png' },
+];
 
-// 打开模态框
+// 当前选中的配置
+const currentConfig = ref(null);
+
 const handleOpen = (key) => {
-  const formConfig = formConfigs.find((item) => item.key === key);
-  currentFormConfig.value = formConfig;
+  currentConfig.value = formConfigs.find((item) => item.key === key);
+  currentKey.value = key;
   visible.value = true;
 };
 
-// 确认按钮回调，提交表单
 const handleOk = async () => {
   visible.value = false;
 };
