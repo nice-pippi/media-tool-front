@@ -1,7 +1,7 @@
 <template>
-  <a-card class="card-container" hoverable>
+  <a-card class="card-container animate__animated animate__fadeInUp" hoverable>
     <template #cover>
-      <slot></slot>
+      <img :src="img" class="img-container" />
     </template>
     <a-card-meta :title="title"></a-card-meta>
   </a-card>
@@ -10,6 +10,7 @@
 <script setup>
 defineProps({
   title: String,
+  img: String,
 });
 </script>
 
@@ -24,5 +25,9 @@ defineProps({
 
 ::v-deep .ant-cart-body {
   padding: 12px;
+}
+
+.img-container {
+  width: 183px;
 }
 </style>
