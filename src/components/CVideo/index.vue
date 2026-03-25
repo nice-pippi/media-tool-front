@@ -20,23 +20,39 @@
       v-if="currentConfig?.component"
       ref="form"
     />
+
+    <a-progress
+      :stroke-color="{
+        '0%': '#108ee9',
+        '100%': '#87d068',
+      }"
+      v-if="progressShow"
+      :percent="percent"
+    />
   </a-modal>
 </template>
 
 <script setup>
 import { ref, defineAsyncComponent, markRaw } from 'vue';
+import { useWebSocket } from '@/hooks/useWebSocket';
+import { createDownloadTask } from '@/api/video';
+
+// WebSocket 基础地址
+const baseWebSocketURL = 'ws://localhost:8888/media-tool/ws/';
 
 // 弹窗显示状态
 const visible = ref(false);
-
-// 当前选中的表单 key
-const currentKey = ref('');
-
 // 当前选中的表单配置
 const currentConfig = ref(null);
-
-// 动态表单组件的 ref
+// 表单组件实例
 const form = ref(null);
+// 进度百分比
+const percent = ref(0);
+// 是否显示进度条
+const progressShow = ref(false);
+
+// WebSocket 实例
+let wsInstance = null;
 
 // 表单配置列表
 const formConfigs = [
@@ -50,26 +66,72 @@ const formConfigs = [
   },
 ];
 
-// 打开表单弹窗
+/**
+ * 打开表单弹窗
+ * @param {string} key - 表单标识
+ */
 const handleOpen = (key) => {
+  // 获取当前表单配置
   currentConfig.value = formConfigs.find((item) => item.key === key);
-  currentKey.value = key;
+  // 打开弹窗
   visible.value = true;
+  // 重置进度
+  percent.value = 0;
+  progressShow.value = false;
+
+  // 清理旧的 WebSocket 连接
+  if (wsInstance) {
+    wsInstance.disconnect();
+    wsInstance = null;
+  }
 };
 
-// 提交表单
+/**
+ * 提交表单
+ */
 const handleOk = async () => {
-  if (form.value) {
-    const isValid = await form.value.validate();
-    if (isValid) {
-      const formData = form.value.getData();
-      console.log('表单数据:', formData);
-      visible.value = false;
-      form.value.reset();
-    }
-  } else {
-    visible.value = false;
-  }
+  // 表单不存在则直接关闭
+  if (!form.value) return;
+
+  // 表单验证
+  const isValid = await form.value.validate();
+  if (!isValid) return;
+
+  // 生成任务ID
+  const taskId = Math.random();
+  // 获取表单数据
+  const formData = form.value.getData();
+  // 创建下载任务
+  await createDownloadTask({ ...formData, taskId });
+
+  // 创建 WebSocket 连接
+  wsInstance = useWebSocket(baseWebSocketURL + taskId, {
+    // 接收进度消息
+    onMessage: (progressData) => {
+      // 更新进度条
+      percent.value = progressData;
+
+      // 下载完成，延迟关闭弹窗
+      if (progressData >= 100) {
+        setTimeout(() => {
+          visible.value = false;
+        }, 1000);
+      }
+    },
+    // 错误处理
+    onError: (err) => {
+      console.error('WebSocket错误:', err);
+    },
+    // 开启自动重连
+    autoReconnect: true,
+  });
+
+  // 建立连接
+  wsInstance.connect();
+  // 显示进度条
+  progressShow.value = true;
+  // 重置表单
+  form.value.reset();
 };
 </script>
 

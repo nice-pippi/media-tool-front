@@ -21,7 +21,7 @@ const {
   connect, // 连接方法
   disconnect, // 断开方法
   send, // 发送方法
-} = useWebSocket('ws://localhost:8888/ws/media-tool/123', {
+} = useWebSocket('ws://localhost:8888/media-tool/ws/123', {
   autoReconnect: true, // 自动重连
   reconnectInterval: 3000, // 3秒重连一次
   maxReconnectAttempts: 5, // 最多重连5次

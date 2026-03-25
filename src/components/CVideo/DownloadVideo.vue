@@ -16,7 +16,6 @@ import { useForm } from '@/hooks/useForm';
 // 使用 Hook，传入初始数据
 const { formRef, formData, validate, getData, reset } = useForm({
   url: '',
-  taskId: '',
 });
 
 // 暴露给父组件
