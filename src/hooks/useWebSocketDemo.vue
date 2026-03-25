@@ -13,39 +13,22 @@
 <script setup>
 import { useWebSocket } from '@/hooks/useWebSocket';
 
-// 1. 初始化，指定URL和配置
+// 初始化 WebSocket
 const {
-  data, // 接收到的消息（响应式）
-  isConnected, // 连接状态（响应式）
-  error, // 错误信息（响应式）
+  data, // 接收到的消息
+  isConnected, // 连接状态
+  error, // 错误信息
   connect, // 连接方法
   disconnect, // 断开方法
   send, // 发送方法
 } = useWebSocket('ws://localhost:8888/media-tool/ws/123', {
   autoReconnect: true, // 自动重连
-  reconnectInterval: 3000, // 3秒重连一次
-  maxReconnectAttempts: 5, // 最多重连5次
-  heartbeatInterval: 30000, // 30秒心跳
-  heartbeatMessage: 'ping', // 心跳消息
+  reconnectInterval: 3000, // 重连间隔
+  maxReconnectAttempts: 5, // 最大重连次数
 });
 
-// 2. 发送消息的方法
+// 发送消息
 const sendMessage = () => {
-  const success = send('Hello Server!');
-  if (success) {
-    console.log('发送成功');
-  } else {
-    console.log('发送失败，未连接');
-  }
-};
-
-// 3. 需要时手动连接（用户点击按钮触发）
-const handleConnect = () => {
-  connect();
-};
-
-// 4. 手动断开
-const handleDisconnect = () => {
-  disconnect();
+  send('Hello Server!');
 };
 </script>
