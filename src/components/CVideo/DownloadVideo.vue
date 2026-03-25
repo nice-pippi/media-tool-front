@@ -11,36 +11,15 @@
 </template>
 
 <script setup>
-import { reactive, ref, defineExpose } from 'vue';
+import { useForm } from '@/hooks/useForm';
 
-const formRef = ref();
-const formData = reactive({
+// 使用 Hook，传入初始数据
+const { formRef, formData, validate, getData, reset } = useForm({
   url: '',
   taskId: '',
 });
 
-// 暴露给父组件的方法
-const validate = async () => {
-  try {
-    // 使用 Ant Design Vue 的表单验证
-    await formRef.value?.validate();
-    return true;
-  } catch (error) {
-    console.log('表单验证失败:', error);
-    return false;
-  }
-};
-
-const getData = () => {
-  return { ...formData }; // 返回副本，避免外部直接修改
-};
-
-const reset = () => {
-  formData.url = '';
-  formData.taskId = '';
-  formRef.value?.clearValidate();
-};
-
+// 暴露给父组件
 defineExpose({
   validate,
   getData,

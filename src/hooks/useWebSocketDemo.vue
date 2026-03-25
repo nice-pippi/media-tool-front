@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { useWebSocket } from '@/composables/useWebSocket';
+import { useWebSocket } from '@/hooks/useWebSocket';
 
 // 1. 初始化，指定URL和配置
 const {
