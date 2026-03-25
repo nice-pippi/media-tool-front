@@ -16,36 +16,41 @@
     destroy-on-close
   >
     <component
-      :is="componentMap[currentKey]"
-      v-if="currentKey && componentMap[currentKey]"
+      :is="currentConfig?.component"
+      v-if="currentConfig?.component"
       ref="form"
     />
   </a-modal>
 </template>
 
 <script setup>
-import { ref, defineAsyncComponent } from 'vue';
+import { ref, defineAsyncComponent, markRaw } from 'vue';
 
+// 弹窗显示状态
 const visible = ref(false);
+
+// 当前选中的表单 key
 const currentKey = ref('');
 
-// 组件映射表
-const componentMap = {
-  downloadVideo: defineAsyncComponent(() => import('./DownloadVideo.vue')),
-};
-
-// 表单配置
-const formConfigs = [
-  { key: 'downloadVideo', name: '下载视频', img: 'download-video.png' },
-];
-
-// 当前选中的配置
+// 当前选中的表单配置
 const currentConfig = ref(null);
 
-// 子组件 ref
+// 动态表单组件的 ref
 const form = ref(null);
 
-// 处理打开弹窗事件
+// 表单配置列表
+const formConfigs = [
+  {
+    key: 'downloadVideo',
+    name: '下载视频',
+    img: 'download-video.png',
+    component: markRaw(
+      defineAsyncComponent(() => import('./DownloadVideo.vue'))
+    ),
+  },
+];
+
+// 打开表单弹窗
 const handleOpen = (key) => {
   currentConfig.value = formConfigs.find((item) => item.key === key);
   currentKey.value = key;
@@ -55,22 +60,12 @@ const handleOpen = (key) => {
 // 提交表单
 const handleOk = async () => {
   if (form.value) {
-    // 1. 先验证表单
     const isValid = await form.value.validate();
-
     if (isValid) {
-      // 2. 验证通过后获取数据
       const formData = form.value.getData();
       console.log('表单数据:', formData);
-
-      // TODO: 调用接口提交数据
-      // await api.submit(formData);
-
-      // 3. 提交成功后关闭弹窗并重置表单
       visible.value = false;
       form.value.reset();
-    } else {
-      console.log('表单验证失败');
     }
   } else {
     visible.value = false;
